@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: runloyal-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/runloyal
+    username: runloyal
+    password: runloyal123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000  # 5 minutes in milliseconds
+
+logging:
+  level:
+    com.runloyal: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN
