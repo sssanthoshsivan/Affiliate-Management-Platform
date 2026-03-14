@@ -7,8 +7,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/runloyal
-    username: runloyal
-    password: runloyal123
+    username: postgres
+    password: root
     driver-class-name: org.postgresql.Driver
 
   jpa:

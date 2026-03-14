@@ -41,6 +41,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- H2 for local testing -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -67,6 +74,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
+            <version>10.4.1</version>
         </dependency>
 
         <!-- Lombok -->

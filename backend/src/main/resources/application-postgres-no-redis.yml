@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/runloyal
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update # Set to update for first run to create tables if they don't exist
+  
+  cache:
+    type: none
+  
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+logging:
+  level:
+    com.runloyal: DEBUG

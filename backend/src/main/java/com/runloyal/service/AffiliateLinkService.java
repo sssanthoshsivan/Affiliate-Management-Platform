@@ -56,7 +56,7 @@ public class AffiliateLinkService {
                     .tenantId(request.getTenantId())
                     .affiliateId(request.getAffiliateId())
                     .itemId(request.getItemId())
-                    .campaign_id(request.getCampaignId()) // Fixed field name from previous entity edit
+                    .campaignId(request.getCampaignId()) 
                     .shortCode(shortCode)
                     .trackingCode(trackingCode)
                     .build();
