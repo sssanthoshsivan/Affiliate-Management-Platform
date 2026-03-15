@@ -1,0 +1,54 @@
+<mat-toolbar color="primary" class="app-toolbar mat-elevation-z4">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="title">{{ title() }}</span>
+  
+  <span class="spacer"></span>
+
+  <mat-form-field appearance="outline" class="tenant-selector" *ngIf="tenants$ | async as tenants">
+    <mat-label>Active Tenant</mat-label>
+    <mat-select [value]="selectedTenantId" (selectionChange)="onTenantChange($event.value)">
+      <mat-option *ngFor="let tenant of tenants" [value]="tenant.id">
+        {{ tenant.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-toolbar>
+
+<mat-sidenav-container class="app-container">
+  <mat-sidenav #sidenav mode="side" opened class="app-sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="/tenants" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>business</mat-icon>
+        <span matListItemTitle>Tenants</span>
+      </a>
+      <a mat-list-item routerLink="/affiliates" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>people</mat-icon>
+        <span matListItemTitle>Affiliates</span>
+      </a>
+      <a mat-list-item routerLink="/campaigns" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>campaign</mat-icon>
+        <span matListItemTitle>Campaigns</span>
+      </a>
+      <a mat-list-item routerLink="/items" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Products & Services</span>
+      </a>
+      <a mat-list-item routerLink="/links" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>link</mat-icon>
+        <span matListItemTitle>Link Generator</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="app-content">
+    <div class="main-outlet">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
