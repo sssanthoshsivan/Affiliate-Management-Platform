@@ -1,0 +1,11 @@
+.create-form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  min-width: 320px;
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}

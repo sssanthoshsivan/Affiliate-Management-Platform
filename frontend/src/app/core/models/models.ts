@@ -45,6 +45,19 @@ export interface AffiliateLink {
   createdAt: string;
 }
 
+export interface AffiliateLinkRequest {
+  tenantId: number;
+  affiliateId: number;
+  itemId: number;
+  campaignId: number;
+}
+
+export interface AffiliateLinkResponse {
+  shortCode: string;
+  trackingUrl: string;
+  shortUrl: string;
+}
+
 export interface Analytics {
   totalClicks: number;
   totalOrders: number;

@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="create-form">
+    <mat-form-field *ngFor="let field of data.fields" appearance="outline">
+      <mat-label>{{ field.label }}</mat-label>
+      
+      <input matInput *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'number'" 
+             [type]="field.type" [formControlName]="field.name">
+      
+      <textarea matInput *ngIf="field.type === 'textarea'" [formControlName]="field.name"></textarea>
+      
+      <mat-select *ngIf="field.type === 'select'" [formControlName]="field.name">
+        <mat-option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.label }}</mat-option>
+      </mat-select>
+
+      <mat-error *ngIf="form.get(field.name)?.hasError('required')">
+        {{ field.label }} is required
+      </mat-error>
+      <mat-error *ngIf="form.get(field.name)?.hasError('email')">
+        Invalid email format
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSubmit()">Create</button>
+</mat-dialog-actions>

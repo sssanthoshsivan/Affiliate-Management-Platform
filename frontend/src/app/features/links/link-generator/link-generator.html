@@ -1,0 +1,80 @@
+<div class="page-header">
+  <div class="header-text">
+    <h1>Link Generator</h1>
+    <p class="subtitle">Create unique tracking links for your affiliates</p>
+  </div>
+</div>
+
+<div class="generator-container">
+  <mat-card class="generator-form-card mat-elevation-z2">
+    <mat-card-header>
+      <mat-card-title>Configuration</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="generatorForm" (ngSubmit)="generateLink()">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Affiliate</mat-label>
+          <mat-select formControlName="affiliateId">
+            <mat-option *ngFor="let aff of affiliates" [value]="aff.id">{{ aff.name }} ({{ aff.email }})</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Select Product/Service</mat-label>
+          <mat-select formControlName="itemId">
+            <mat-option *ngFor="let item of items" [value]="item.id">{{ item.name }} - {{ item.price | currency }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Select Campaign</mat-label>
+          <mat-select formControlName="campaignId">
+            <mat-option *ngFor="let camp of campaigns" [value]="camp.id">{{ camp.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="generatorForm.invalid || loading" class="generate-btn">
+          <mat-icon>magic_button</mat-icon>
+          Generate Tracking Link
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="result-card mat-elevation-z2" *ngIf="generatedLink">
+    <mat-card-header>
+      <mat-card-title>Generated Link Details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="result-item">
+        <label>Short Code</label>
+        <div class="copy-box">
+          <code>{{ generatedLink.shortCode }}</code>
+          <button mat-icon-button [cdkCopyToClipboard]="generatedLink.shortCode" (cdkCopyToClipboardCopied)="copyToClipboard(generatedLink.shortCode)">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <label>Tracking Link (Short URL)</label>
+        <div class="copy-box">
+          <code>{{ generatedLink.shortUrl }}</code>
+          <button mat-icon-button [cdkCopyToClipboard]="generatedLink.shortUrl" (cdkCopyToClipboardCopied)="copyToClipboard(generatedLink.shortUrl)">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="result-item">
+        <label>Direct Tracking URL (Internal)</label>
+        <div class="copy-box">
+          <code class="small-text">{{ generatedLink.trackingUrl }}</code>
+          <button mat-icon-button [cdkCopyToClipboard]="generatedLink.trackingUrl" (cdkCopyToClipboardCopied)="copyToClipboard(generatedLink.trackingUrl)">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

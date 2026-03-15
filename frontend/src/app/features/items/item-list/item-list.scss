@@ -1,0 +1,19 @@
+@import '../../affiliates/affiliate-list/affiliate-list.scss';
+
+.type-chip {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.product {
+    background-color: #e0f2fe;
+    color: #0369a1;
+  }
+
+  &.service {
+    background-color: #f3e8ff;
+    color: #7e22ce;
+  }
+}

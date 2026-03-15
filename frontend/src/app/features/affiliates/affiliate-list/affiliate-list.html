@@ -1,0 +1,67 @@
+<div class="page-header">
+  <div class="header-text">
+    <h1>Affiliates</h1>
+    <p class="subtitle">Manage your network of referral partners</p>
+  </div>
+  <button mat-raised-button color="primary" (click)="openCreateDialog()">
+    <mat-icon>add</mat-icon>
+    Add Affiliate
+  </button>
+</div>
+
+<mat-card class="table-card mat-elevation-z2">
+  <mat-card-content>
+    <table mat-table [dataSource]="affiliates" *ngIf="!loading">
+      
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCell )="id"> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let element">
+          <span class="status-chip" [ngClass]="element.status?.toLowerCase()">
+            {{element.status}}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef> Joined </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'mediumDate'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="accent">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <div class="loading-shade" *ngIf="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div class="no-data" *ngIf="!loading && affiliates.length === 0">
+      <mat-icon>people_outline</mat-icon>
+      <p>No affiliates found for this tenant.</p>
+    </div>
+  </mat-card-content>
+</mat-card>
