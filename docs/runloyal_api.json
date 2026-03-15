@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "9ecd0029-0014-4bc4-b58d-f46ff73445b2",
+		"name": "RunLoyal Management Platform",
+		"description": "API collection for managing multi-tenant affiliates, campaigns, and tracking.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tenants",
+			"item": [
+				{
+					"name": "Get All Tenants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tenants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Tenant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Platform\",\n    \"domain\": \"new.runloyal.com\",\n    \"commissionRate\": 15.0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/tenants",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tracking",
+			"item": [
+				{
+					"name": "Generate Affiliate Link",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tenantId\": 1,\n    \"affiliateId\": 1,\n    \"itemId\": 1,\n    \"campaignId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/affiliate-links",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"affiliate-links"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Track Click",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/track?tenantId=1&affiliateId=1&itemId=1&campaignId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"track"
+							],
+							"query": [
+								{ "key": "tenantId", "value": "1" },
+								{ "key": "affiliateId", "value": "1" },
+								{ "key": "itemId", "value": "1" },
+								{ "key": "campaignId", "value": "1" }
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analytics",
+			"item": [
+				{
+					"name": "Get Dashboard Metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tenants/1/analytics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tenants",
+								"1",
+								"analytics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
