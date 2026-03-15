@@ -1,0 +1,97 @@
+<div class="dashboard-container">
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Performance Hub</h1>
+      <p class="subtitle">Real-time tracking and conversion analytics</p>
+    </div>
+  </div>
+
+  <app-filter-bar 
+    [affiliates]="affiliates" 
+    [campaigns]="campaigns" 
+    [items]="items"
+    (filterChange)="onFilterChange($event)">
+  </app-filter-bar>
+
+  <div class="stats-grid" *ngIf="analytics">
+    <app-stat-card 
+      label="Total Clicks" 
+      [value]="analytics.totalClicks | number" 
+      icon="mouse" 
+      color="#3b82f6">
+    </app-stat-card>
+    <app-stat-card 
+      label="Total Orders" 
+      [value]="analytics.totalOrders | number" 
+      icon="shopping_cart" 
+      color="#10b981">
+    </app-stat-card>
+    <app-stat-card 
+      label="Revenue" 
+      [value]="analytics.totalRevenue | currency" 
+      icon="payments" 
+      color="#8b5cf6">
+    </app-stat-card>
+    <app-stat-card 
+      label="Commission" 
+      [value]="analytics.totalCommission | currency" 
+      icon="account_balance_wallet" 
+      color="#f59e0b">
+    </app-stat-card>
+  </div>
+
+  <div class="dashboard-main-content">
+    <mat-card class="table-card mat-elevation-z2">
+      <mat-card-header>
+        <mat-card-title>Top Performing Affiliates</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="loading-overlay" *ngIf="loading">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+
+        <table mat-table [dataSource]="analytics?.topAffiliates || []" *ngIf="!loading">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Affiliate </th>
+            <td mat-cell *matCellDef="let element"> {{element.affiliateName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="orders">
+            <th mat-header-cell *matHeaderCellDef> Orders </th>
+            <td mat-cell *matCellDef="let element"> {{element.orders}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="revenue">
+            <th mat-header-cell *matHeaderCellDef> Revenue </th>
+            <td mat-cell *matCellDef="let element"> {{element.revenue | currency}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="commission">
+            <th mat-header-cell *matHeaderCellDef> Commission </th>
+            <td mat-cell *matHeaderCellDef="let element"> {{element.commission | currency}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="conversion">
+            <th mat-header-cell *matHeaderCellDef> Conv. Rate </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="conversion-cell">
+                <span class="rate-value">{{ getConversionRate(element.orders, analytics?.totalClicks || 0) }}</span>
+                <div class="progress-bar">
+                   <div class="progress-fill" [style.width]="getConversionRate(element.orders, analytics?.totalClicks || 0)"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <div class="no-data" *ngIf="!loading && (!analytics || analytics.topAffiliates.length === 0)">
+          <mat-icon>bar_chart</mat-icon>
+          <p>No conversion data available for this range.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

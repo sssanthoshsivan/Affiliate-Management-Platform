@@ -1,0 +1,51 @@
+<mat-card class="filter-card mat-elevation-z1">
+  <mat-card-content>
+    <form [formGroup]="filterForm" class="filter-form">
+      
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Affiliate</mat-label>
+        <mat-select formControlName="affiliateId">
+          <mat-option [value]="null">All Affiliates</mat-option>
+          <mat-option *ngFor="let aff of affiliates" [value]="aff.id">{{ aff.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Campaign</mat-label>
+        <mat-select formControlName="campaignId">
+          <mat-option [value]="null">All Campaigns</mat-option>
+          <mat-option *ngFor="let camp of campaigns" [value]="camp.id">{{ camp.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Product/Service</mat-label>
+        <mat-select formControlName="itemId">
+          <mat-option [value]="null">All Items</mat-option>
+          <mat-option *ngFor="let item of items" [value]="item.id">{{ item.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Date Range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="from" placeholder="Start date">
+          <input matEndDate formControlName="to" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+      <div class="filter-actions">
+        <button mat-flat-button color="primary" (click)="applyFilters()">
+          <mat-icon>filter_list</mat-icon>
+          Apply
+        </button>
+        <button mat-stroked-button color="warn" (click)="resetFilters()">
+          <mat-icon>refresh</mat-icon>
+          Reset
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

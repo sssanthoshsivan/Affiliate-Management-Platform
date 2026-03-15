@@ -1,0 +1,39 @@
+.filter-card {
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 8px;
+}
+
+.filter-field {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px; // Align with outline heights
+
+  button {
+    height: 48px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .filter-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-actions {
+    flex-direction: column;
+  }
+}
