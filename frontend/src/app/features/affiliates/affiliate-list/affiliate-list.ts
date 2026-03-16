@@ -94,4 +94,59 @@ export class AffiliateList implements OnInit {
       }
     });
   }
+
+  openEditDialog(affiliate: Affiliate): void {
+    const dialogRef = this.dialog.open(CreateDialog, {
+      width: '400px',
+      data: { 
+        title: 'Edit Affiliate',
+        fields: [
+          { name: 'name', label: 'Full Name', type: 'text', required: true, value: affiliate.name, initialValue: affiliate.name },
+          { name: 'email', label: 'Email Address', type: 'email', required: true, value: affiliate.email, initialValue: affiliate.email },
+          { 
+            name: 'status', 
+            label: 'Status', 
+            type: 'select', 
+            options: [
+              { label: 'Active', value: 'ACTIVE' },
+              { label: 'Pending', value: 'PENDING' },
+              { label: 'In-Active', value: 'INACTIVE' }
+            ],
+            value: affiliate.status,
+            initialValue: affiliate.status
+          }
+        ]
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const tenantId = this.tenantContext.getTenantId();
+        if (tenantId) {
+          this.affiliateService.update(tenantId, affiliate.id, result).subscribe({
+            next: () => {
+              this.snackBar.open('Affiliate updated successfully', 'Close', { duration: 3000 });
+              this.loadAffiliates(tenantId);
+            },
+            error: () => this.snackBar.open('Error updating affiliate', 'Close', { duration: 3000 })
+          });
+        }
+      }
+    });
+  }
+
+  deleteAffiliate(id: number): void {
+    if (confirm('Are you sure you want to delete this affiliate?')) {
+      const tenantId = this.tenantContext.getTenantId();
+      if (tenantId) {
+        this.affiliateService.delete(tenantId, id).subscribe({
+          next: () => {
+            this.snackBar.open('Affiliate deleted successfully', 'Close', { duration: 3000 });
+            this.loadAffiliates(tenantId);
+          },
+          error: () => this.snackBar.open('Error deleting affiliate', 'Close', { duration: 3000 })
+        });
+      }
+    }
+  }
 }

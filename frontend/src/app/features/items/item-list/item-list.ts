@@ -103,4 +103,53 @@ export class ItemList implements OnInit {
       }
     });
   }
+
+  openEditDialog(item: Item): void {
+    const dialogRef = this.dialog.open(CreateDialog, {
+      width: '400px',
+      data: {
+        title: 'Edit Item',
+        fields: [
+          { name: 'name', label: 'Item Name', type: 'text', required: true, value: item.name, initialValue: item.name },
+          { name: 'type', label: 'Type', type: 'select', required: true, 
+            options: [{value: 'PRODUCT', label: 'Product'}, {value: 'SERVICE', label: 'Service'}],
+            value: item.type,
+            initialValue: item.type
+          },
+          { name: 'category', label: 'Category', type: 'text', required: false, value: item.category, initialValue: item.category },
+          { name: 'price', label: 'Price', type: 'number', required: true, value: item.price, initialValue: item.price }
+        ]
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const tenantId = this.tenantContext.getTenantId();
+        if (tenantId) {
+          this.itemService.update(tenantId, item.id, result).subscribe({
+            next: () => {
+              this.snackBar.open('Item updated', 'Close', { duration: 3000 });
+              this.loadItems(tenantId);
+            },
+            error: () => this.snackBar.open('Error updating item', 'Close', { duration: 3000 })
+          });
+        }
+      }
+    });
+  }
+
+  deleteItem(id: number): void {
+    if (confirm('Are you sure you want to delete this item?')) {
+      const tenantId = this.tenantContext.getTenantId();
+      if (tenantId) {
+        this.itemService.delete(tenantId, id).subscribe({
+          next: () => {
+            this.snackBar.open('Item deleted', 'Close', { duration: 3000 });
+            this.loadItems(tenantId);
+          },
+          error: () => this.snackBar.open('Error deleting item', 'Close', { duration: 3000 })
+        });
+      }
+    }
+  }
 }

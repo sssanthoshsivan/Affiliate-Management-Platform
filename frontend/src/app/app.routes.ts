@@ -2,6 +2,10 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'product/:id',
+    loadComponent: () => import('./features/product/product-detail/product-detail').then(m => m.ProductDetail)
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'

@@ -1,0 +1,324 @@
+.product-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background: linear-gradient(135deg, #f0f4ff 0%, #faf0ff 100%);
+}
+
+// ──── State containers (loading / error / success) ────────────────────────
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px 40px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  max-width: 480px;
+  width: 100%;
+
+  .state-text {
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .state-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+}
+
+.error-state .state-icon {
+  color: var(--danger);
+  opacity: 0.8;
+}
+
+// ──── Success State ───────────────────────────────────────────────────────
+.success-state {
+  gap: 20px;
+
+  .success-animation {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .success-icon {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    color: #10b981;
+    animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .success-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .commission-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #1d4ed8;
+    font-weight: 600;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.tracking-summary {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+
+  .tracking-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    font-size: 13px;
+    background: #fafcfe;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tkey {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .tval {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+  }
+}
+
+// ──── Product Card ────────────────────────────────────────────────────────
+.product-container {
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.1);
+  max-width: 640px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.product-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 40px;
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+  border-bottom: 1px solid var(--border);
+
+  .product-icon-wrapper {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+
+    .product-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      color: #ffffff;
+    }
+  }
+
+  .hero-content {
+    flex: 1;
+    min-width: 0;
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .product-name {
+      margin: 0 0 16px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .price-display {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+
+      .price-label {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .price-value {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: -0.02em;
+      }
+    }
+  }
+}
+
+.type-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+
+  &.service {
+    background-color: #f5f3ff;
+    color: #7c3aed;
+    border-color: #ddd6fe;
+  }
+}
+
+.category-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: var(--background);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+// ──── Tracking Attribution ────────────────────────────────────────────────
+.tracking-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 40px;
+  background: #fffbeb;
+  border-bottom: 1px solid #fef3c7;
+  font-size: 13px;
+  color: #92400e;
+  font-weight: 500;
+
+  .tracking-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: #f59e0b;
+  }
+
+  .tracking-detail {
+    color: #b45309;
+    font-weight: 600;
+  }
+}
+
+// ──── CTA Section ─────────────────────────────────────────────────────────
+.cta-section {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+
+  .buy-btn {
+    height: 60px;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(59, 130, 246, 0.45);
+    }
+
+    .btn-spinner {
+      --mdc-circular-progress-active-indicator-color: #ffffff;
+    }
+
+    mat-icon {
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  .cta-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+
+    mat-icon {
+      font-size: 15px;
+      width: 15px;
+      height: 15px;
+      color: var(--success);
+    }
+  }
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

@@ -26,4 +26,12 @@ export class TenantService {
   updateCommissionRate(id: number, rate: number): Observable<Tenant> {
     return this.http.patch<Tenant>(`${this.apiUrl}/${id}`, { commissionRate: rate });
   }
+
+  update(id: number, tenant: Partial<Tenant>): Observable<Tenant> {
+    return this.http.put<Tenant>(`${this.apiUrl}/${id}`, tenant);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

@@ -34,4 +34,18 @@ public class CampaignController {
                                                        @PathVariable Long id) {
         return ResponseEntity.ok(campaignService.findById(tenantId, id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CampaignResponse> update(@PathVariable Long tenantId,
+                                                     @PathVariable Long id,
+                                                     @Valid @RequestBody CampaignRequest request) {
+        return ResponseEntity.ok(campaignService.update(tenantId, id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long tenantId,
+                                       @PathVariable Long id) {
+        campaignService.delete(tenantId, id);
+        return ResponseEntity.noContent().build();
+    }
 }

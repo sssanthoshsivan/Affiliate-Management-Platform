@@ -1,0 +1,83 @@
+<div class="product-page">
+
+  <!-- Loading State -->
+  <div class="state-container" *ngIf="loading">
+    <mat-spinner diameter="56"></mat-spinner>
+    <p class="state-text">Loading product...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="state-container error-state" *ngIf="!loading && error">
+    <mat-icon class="state-icon">error_outline</mat-icon>
+    <h2>Something went wrong</h2>
+    <p class="state-text">{{ error }}</p>
+  </div>
+
+  <!-- Success State (after order placed) -->
+  <div class="state-container success-state" *ngIf="!loading && orderPlaced && item">
+    <div class="success-animation">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+    </div>
+    <h1 class="success-title">Order Confirmed!</h1>
+    <p class="state-text">Thank you for your purchase of <strong>{{ item.name }}</strong>.</p>
+    <div class="commission-badge" *ngIf="orderCommission">
+      <mat-icon>payments</mat-icon>
+      <span>Affiliate commission: <strong>{{ orderCommission | currency }}</strong></span>
+    </div>
+    <div class="tracking-summary">
+      <div class="tracking-row"><span class="tkey">Item</span><span class="tval">{{ item.name }}</span></div>
+      <div class="tracking-row"><span class="tkey">Amount</span><span class="tval">{{ item.price | currency }}</span></div>
+      <div class="tracking-row"><span class="tkey">Affiliate ID</span><span class="tval">#{{ affiliateId }}</span></div>
+      <div class="tracking-row" *ngIf="campaignId"><span class="tkey">Campaign ID</span><span class="tval">#{{ campaignId }}</span></div>
+    </div>
+  </div>
+
+  <!-- Product Detail Card -->
+  <div class="product-container" *ngIf="!loading && !error && !orderPlaced && item">
+
+    <!-- Hero Section -->
+    <div class="product-hero">
+      <div class="product-icon-wrapper">
+        <mat-icon class="product-icon">
+          {{ item.type === 'SERVICE' ? 'design_services' : 'inventory_2' }}
+        </mat-icon>
+      </div>
+      <div class="hero-content">
+        <div class="badges">
+          <span class="type-badge" [class.service]="item.type === 'SERVICE'">{{ item.type }}</span>
+          <span class="category-badge" *ngIf="item.category">{{ item.category }}</span>
+        </div>
+        <h1 class="product-name">{{ item.name }}</h1>
+        <div class="price-display">
+          <span class="price-label">Price</span>
+          <span class="price-value">{{ item.price | currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracking Attribution -->
+    <div class="tracking-info">
+      <mat-icon class="tracking-icon">link</mat-icon>
+      <span>You arrived via an affiliate referral link</span>
+      <span class="tracking-detail">&nbsp;(Affiliate #{{ affiliateId }}<span *ngIf="campaignId">, Campaign #{{ campaignId }}</span>)</span>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <button
+        mat-raised-button
+        class="buy-btn"
+        (click)="placeOrder()"
+        [disabled]="ordering">
+        <mat-spinner diameter="20" *ngIf="ordering" class="btn-spinner"></mat-spinner>
+        <mat-icon *ngIf="!ordering">shopping_cart_checkout</mat-icon>
+        <span>{{ ordering ? 'Processing...' : 'Buy Now — ' + (item.price | currency) }}</span>
+      </button>
+      <p class="cta-note">
+        <mat-icon>shield</mat-icon>
+        Commission tracked automatically on purchase
+      </p>
+    </div>
+
+  </div>
+</div>

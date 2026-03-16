@@ -30,10 +30,9 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-html, body { 
+html, body {
   height: 100%;
   margin: 0;
-  overflow: hidden;
 }
 
 app-root {
@@ -161,4 +160,18 @@ body {
   font-weight: 700 !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* Material Tooltip Redesign - Premium dark, smaller, polished */
+.cdk-overlay-container .mat-mdc-tooltip .mdc-tooltip__surface {
+  background-color: #1a202c !important; 
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  min-height: auto !important;
+  line-height: 1.4 !important;
 }

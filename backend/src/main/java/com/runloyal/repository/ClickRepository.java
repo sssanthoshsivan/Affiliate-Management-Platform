@@ -34,4 +34,12 @@ public interface ClickRepository extends JpaRepository<Click, Long> {
     List<Object[]> countByAffiliate(@Param("tenantId") Long tenantId,
                                     @Param("from") LocalDateTime from,
                                     @Param("to") LocalDateTime to);
+
+    void deleteByTenantIdAndAffiliateId(Long tenantId, Long affiliateId);
+
+    void deleteByTenantIdAndCampaignId(Long tenantId, Long campaignId);
+
+    void deleteByTenantIdAndItemId(Long tenantId, Long itemId);
+
+    void deleteByTenantId(Long tenantId);
 }

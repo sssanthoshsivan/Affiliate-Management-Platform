@@ -1,6 +1,7 @@
-<mat-toolbar class="app-toolbar">
+<!-- Admin Toolbar (hidden on product page) -->
+<mat-toolbar class="app-toolbar" *ngIf="!isProductPage">
   <div class="toolbar-left">
-    <button mat-icon-button (click)="sidenav.toggle()" class="menu-btn">
+    <button mat-icon-button (click)="toggleSidenav()" class="menu-btn">
       <mat-icon>menu</mat-icon>
     </button>
     <span class="title">RunLoyal</span>
@@ -20,9 +21,14 @@
   </div>
 </mat-toolbar>
 
-<mat-sidenav-container class="app-container">
-  <mat-sidenav #sidenav mode="side" opened class="app-sidenav">
-    <mat-nav-list>
+<!-- Main Container -->
+<mat-sidenav-container class="app-container" [class.full-screen]="isProductPage">
+  <!-- Sidenav (Admin Sidebar) -->
+  <mat-sidenav #sidenav 
+               mode="over" 
+               class="app-sidenav" 
+               *ngIf="!isProductPage">
+    <mat-nav-list (click)="sidenav.close()">
       <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Dashboard</span>
@@ -41,7 +47,7 @@
       </a>
       <a mat-list-item routerLink="/items" routerLinkActive="active-link">
         <mat-icon matListItemIcon>inventory_2</mat-icon>
-        <span matListItemTitle>Products & Services</span>
+        <span matListItemTitle>Products &amp; Services</span>
       </a>
       <a mat-list-item routerLink="/links" routerLinkActive="active-link">
         <mat-icon matListItemIcon>link</mat-icon>
@@ -50,8 +56,9 @@
     </mat-nav-list>
   </mat-sidenav>
 
+  <!-- Content Area -->
   <mat-sidenav-content class="app-content">
-    <div class="main-outlet">
+    <div class="main-outlet" [class.no-padding]="isProductPage">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

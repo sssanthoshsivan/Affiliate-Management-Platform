@@ -20,4 +20,12 @@ export class AffiliateService {
   create(tenantId: number, affiliate: Partial<Affiliate>): Observable<Affiliate> {
     return this.http.post<Affiliate>(`/api/tenants/${tenantId}/affiliates`, affiliate);
   }
+
+  update(tenantId: number, id: number, affiliate: Partial<Affiliate>): Observable<Affiliate> {
+    return this.http.put<Affiliate>(`/api/tenants/${tenantId}/affiliates/${id}`, affiliate);
+  }
+
+  delete(tenantId: number, id: number): Observable<void> {
+    return this.http.delete<void>(`/api/tenants/${tenantId}/affiliates/${id}`);
+  }
 }

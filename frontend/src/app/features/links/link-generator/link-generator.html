@@ -57,17 +57,19 @@
       </div>
 
       <div class="result-item">
-        <label>Tracking Link (Short URL)</label>
-        <div class="copy-box">
-          <code>{{ generatedLink.shortUrl }}</code>
-          <button mat-icon-button [cdkCopyToClipboard]="generatedLink.shortUrl" (cdkCopyToClipboardCopied)="copyToClipboard(generatedLink.shortUrl)">
+        <label>Affiliate Link (share this)</label>
+        <div class="copy-box clickable-link">
+          <a [href]="'http://localhost:4200' + generatedLink.shortUrl" target="_blank" rel="noopener">
+            <code>http://localhost:4200{{ generatedLink.shortUrl }}</code>
+          </a>
+          <button mat-icon-button [cdkCopyToClipboard]="'http://localhost:4200' + generatedLink.shortUrl" (cdkCopyToClipboardCopied)="copyToClipboard(generatedLink.shortUrl)">
             <mat-icon>content_copy</mat-icon>
           </button>
         </div>
       </div>
 
       <div class="result-item">
-        <label>Direct Tracking URL (Internal)</label>
+        <label>Internal Tracking URL</label>
         <div class="copy-box">
           <code class="small-text">{{ generatedLink.trackingUrl }}</code>
           <button mat-icon-button [cdkCopyToClipboard]="generatedLink.trackingUrl" (cdkCopyToClipboardCopied)="copyToClipboard(generatedLink.trackingUrl)">

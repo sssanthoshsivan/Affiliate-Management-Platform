@@ -45,8 +45,11 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="accent" (click)="updateCommission(element)" matTooltip="Update Commission">
-            <mat-icon>percent</mat-icon>
+          <button mat-icon-button color="primary" (click)="openEditDialog(element)" matTooltip="Edit Tenant">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteTenant(element.id)" matTooltip="Delete Tenant">
+            <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>

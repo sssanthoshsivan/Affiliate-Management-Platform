@@ -34,4 +34,18 @@ public class AffiliateController {
                                                        @PathVariable Long id) {
         return ResponseEntity.ok(affiliateService.findById(tenantId, id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AffiliateResponse> update(@PathVariable Long tenantId,
+                                                     @PathVariable Long id,
+                                                     @Valid @RequestBody AffiliateRequest request) {
+        return ResponseEntity.ok(affiliateService.update(tenantId, id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long tenantId,
+                                       @PathVariable Long id) {
+        affiliateService.delete(tenantId, id);
+        return ResponseEntity.noContent().build();
+    }
 }

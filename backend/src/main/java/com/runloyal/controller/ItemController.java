@@ -34,4 +34,18 @@ public class ItemController {
                                                   @PathVariable Long id) {
         return ResponseEntity.ok(itemService.findById(tenantId, id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ItemResponse> update(@PathVariable Long tenantId,
+                                                @PathVariable Long id,
+                                                @Valid @RequestBody ItemRequest request) {
+        return ResponseEntity.ok(itemService.update(tenantId, id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long tenantId,
+                                       @PathVariable Long id) {
+        itemService.delete(tenantId, id);
+        return ResponseEntity.noContent().build();
+    }
 }

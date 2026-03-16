@@ -44,4 +44,15 @@ public class TenantController {
         }
         return ResponseEntity.ok(tenantService.updateCommissionRate(id, rate));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TenantResponse> update(@PathVariable Long id, @Valid @RequestBody TenantRequest request) {
+        return ResponseEntity.ok(tenantService.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        tenantService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -87,33 +87,51 @@ export class TenantList implements OnInit {
     });
   }
 
-  updateCommission(tenant: Tenant): void {
+  openEditDialog(tenant: Tenant): void {
     const dialogRef = this.dialog.open(CreateDialog, {
       width: '400px',
       data: {
-        title: `Update Commission: ${tenant.name}`,
+        title: 'Edit Tenant',
         fields: [
+          { name: 'name', label: 'Tenant Name', type: 'text', required: true, value: tenant.name },
+          { name: 'domain', label: 'Domain', type: 'text', required: true, value: tenant.domain },
+          { name: 'commissionRate', label: 'Commission Rate (%)', type: 'number', required: true, value: tenant.commissionRate },
           { 
-            name: 'commissionRate', 
-            label: 'Commission Rate (%)', 
-            type: 'number', 
-            required: true, 
-            initialValue: tenant.commissionRate 
+            name: 'status', 
+            label: 'Status', 
+            type: 'select', 
+            options: [
+              { label: 'Active', value: 'ACTIVE' },
+              { label: 'In-Active', value: 'INACTIVE' }
+            ],
+            value: tenant.status 
           }
         ]
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && result.commissionRate !== undefined) {
-        this.tenantService.updateCommissionRate(tenant.id, result.commissionRate).subscribe({
+      if (result) {
+        this.tenantService.update(tenant.id, result).subscribe({
           next: () => {
-            this.snackBar.open('Commission rate updated', 'Close', { duration: 3000 });
+            this.snackBar.open('Tenant updated', 'Close', { duration: 3000 });
             this.loadTenants();
           },
-          error: () => this.snackBar.open('Error updating rate', 'Close', { duration: 3000 })
+          error: () => this.snackBar.open('Error updating tenant', 'Close', { duration: 3000 })
         });
       }
     });
+  }
+
+  deleteTenant(id: number): void {
+    if (confirm('Are you sure you want to delete this tenant? This will also delete all associated affiliates, links, and orders.')) {
+      this.tenantService.delete(id).subscribe({
+        next: () => {
+          this.snackBar.open('Tenant deleted', 'Close', { duration: 3000 });
+          this.loadTenants();
+        },
+        error: () => this.snackBar.open('Error deleting tenant', 'Close', { duration: 3000 })
+      });
+    }
   }
 }

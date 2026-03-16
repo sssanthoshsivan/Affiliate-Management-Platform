@@ -1,5 +1,6 @@
 server:
   port: 8080
+  forward-headers-strategy: native  # honour X-Forwarded-* from nginx reverse proxy
 
 spring:
   application:
@@ -41,3 +42,7 @@ logging:
     com.runloyal: DEBUG
     org.springframework.web: INFO
     org.hibernate.SQL: WARN
+
+app:
+  frontend:
+    url: http://localhost:4200

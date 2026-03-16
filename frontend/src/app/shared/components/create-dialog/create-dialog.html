@@ -24,5 +24,7 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSubmit()">Create</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="onSubmit()">
+    {{ data.title.toLowerCase().includes('edit') ? 'Update' : 'Create' }}
+  </button>
 </mat-dialog-actions>

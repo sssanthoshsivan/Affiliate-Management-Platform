@@ -102,3 +102,18 @@ form {
 .small-text {
   font-size: 11px !important;
 }
+
+.clickable-link {
+  a {
+    flex: 1;
+    text-decoration: none;
+    code {
+      color: var(--primary) !important;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    &:hover code {
+      color: var(--primary-dark) !important;
+    }
+  }
+}

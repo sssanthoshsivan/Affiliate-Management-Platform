@@ -94,4 +94,47 @@ export class CampaignList implements OnInit {
       }
     });
   }
+
+  openEditDialog(campaign: Campaign): void {
+    const dialogRef = this.dialog.open(CreateDialog, {
+      width: '400px',
+      data: {
+        title: 'Edit Campaign',
+        fields: [
+          { name: 'name', label: 'Campaign Name', type: 'text', required: true, value: campaign.name, initialValue: campaign.name },
+          { name: 'description', label: 'Description', type: 'textarea', required: false, value: campaign.description, initialValue: campaign.description }
+        ]
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const tenantId = this.tenantContext.getTenantId();
+        if (tenantId) {
+          this.campaignService.update(tenantId, campaign.id, result).subscribe({
+            next: () => {
+              this.snackBar.open('Campaign updated', 'Close', { duration: 3000 });
+              this.loadCampaigns(tenantId);
+            },
+            error: () => this.snackBar.open('Error updating campaign', 'Close', { duration: 3000 })
+          });
+        }
+      }
+    });
+  }
+
+  deleteCampaign(id: number): void {
+    if (confirm('Are you sure you want to delete this campaign?')) {
+      const tenantId = this.tenantContext.getTenantId();
+      if (tenantId) {
+        this.campaignService.delete(tenantId, id).subscribe({
+          next: () => {
+            this.snackBar.open('Campaign deleted', 'Close', { duration: 3000 });
+            this.loadCampaigns(tenantId);
+          },
+          error: () => this.snackBar.open('Error deleting campaign', 'Close', { duration: 3000 })
+        });
+      }
+    }
+  }
 }

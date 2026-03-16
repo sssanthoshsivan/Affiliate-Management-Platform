@@ -1,5 +1,12 @@
 @use '../../../shared/styles/dashboard-common.scss' as *;
 
+.dashboard-container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-bottom: 200px;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -9,9 +16,23 @@
 
 .dashboard-main-content {
   margin-top: 32px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  table {
+    min-width: 800px; // Ensure table columns don't compress too much
+  }
 }
 
 .table-card {
+  max-width: 100%;
+  overflow: hidden;
   mat-card-header {
     background-color: #fafcfe;
     padding: 20px 24px;

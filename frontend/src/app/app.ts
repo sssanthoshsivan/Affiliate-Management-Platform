@@ -1,7 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, OnInit, signal, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,11 +37,23 @@ export class App implements OnInit {
   protected readonly title = signal('RunLoyal Affiliate Platform');
   tenants$: Observable<Tenant[]> | undefined;
   selectedTenantId: number | null = null;
+  isProductPage = false;
+
+  @ViewChild('sidenav') sidenav!: MatSidenav;
 
   constructor(
     private tenantContext: TenantContextService,
-    private tenantService: TenantService
-  ) {}
+    private tenantService: TenantService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.isProductPage = this.router.url.split('?')[0].includes('/product/');
+      this.cdr.detectChanges();
+    });
+  }
 
   ngOnInit(): void {
     this.tenants$ = this.tenantService.findAll();
@@ -61,6 +74,11 @@ export class App implements OnInit {
   onTenantChange(id: number): void {
     this.tenantContext.setTenantId(id);
     this.selectedTenantId = id;
-    // Removed window.location.reload() to favor reactive updates
+  }
+
+  toggleSidenav(): void {
+    if (this.sidenav) {
+      this.sidenav.toggle();
+    }
   }
 }

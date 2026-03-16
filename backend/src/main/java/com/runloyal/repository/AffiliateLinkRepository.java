@@ -16,4 +16,12 @@ public interface AffiliateLinkRepository extends JpaRepository<AffiliateLink, Lo
 
     Optional<AffiliateLink> findByAffiliateIdAndItemIdAndCampaignId(
             Long affiliateId, Long itemId, Long campaignId);
+
+    void deleteByTenantIdAndAffiliateId(Long tenantId, Long affiliateId);
+
+    void deleteByTenantIdAndCampaignId(Long tenantId, Long campaignId);
+
+    void deleteByTenantIdAndItemId(Long tenantId, Long itemId);
+
+    void deleteByTenantId(Long tenantId);
 }

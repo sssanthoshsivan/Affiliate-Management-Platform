@@ -47,10 +47,10 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button class="action-btn">
+          <button mat-icon-button class="action-btn" (click)="openEditDialog(element)" matTooltip="Edit Affiliate">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button class="action-btn danger">
+          <button mat-icon-button class="action-btn danger" (click)="deleteAffiliate(element.id)" matTooltip="Delete Affiliate">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

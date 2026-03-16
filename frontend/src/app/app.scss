@@ -59,7 +59,7 @@
 
 .app-container {
   flex: 1;
-  overflow: hidden;
+  position: relative;
 }
 
 .app-sidenav {
@@ -108,10 +108,23 @@
 
 .app-content {
   background-color: var(--background);
-  padding: 32px 32px 80px 32px; // Added bottom padding for better scroll experience
+  padding: 32px 32px 80px 32px;
+}
+
+.app-container.full-screen {
+  .app-content {
+    padding: 0 !important;
+  }
 }
 
 .main-outlet {
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  box-sizing: border-box;
+
+  &.no-padding {
+    max-width: none;
+    margin: 0;
+  }
 }

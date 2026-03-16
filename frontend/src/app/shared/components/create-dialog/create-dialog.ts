@@ -14,6 +14,7 @@ export interface DialogField {
   required?: boolean;
   options?: { value: any, label: string }[];
   initialValue?: any;
+  value?: any;
 }
 
 @Component({
@@ -44,7 +45,11 @@ export class CreateDialog {
     data.fields.forEach(field => {
       const validators = field.required ? [Validators.required] : [];
       if (field.type === 'email') validators.push(Validators.email);
-      group[field.name] = [field.initialValue ?? '', validators];
+      
+      const val = (field.value !== undefined && field.value !== null) ? field.value : 
+                  (field.initialValue !== undefined && field.initialValue !== null) ? field.initialValue : '';
+                  
+      group[field.name] = [val, validators];
     });
     this.form = this.fb.group(group);
   }
