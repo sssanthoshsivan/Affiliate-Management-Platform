@@ -18,8 +18,8 @@ public interface ClickRepository extends JpaRepository<Click, Long> {
            "AND (:affiliateId IS NULL OR c.affiliateId = :affiliateId) " +
            "AND (:campaignId IS NULL OR c.campaignId = :campaignId) " +
            "AND (:itemId IS NULL OR c.itemId = :itemId) " +
-           "AND (:from IS NULL OR c.createdAt >= :from) " +
-           "AND (:to IS NULL OR c.createdAt <= :to)")
+           "AND (cast(:from as timestamp) IS NULL OR c.createdAt >= :from) " +
+           "AND (cast(:to as timestamp) IS NULL OR c.createdAt <= :to)")
     Long countFiltered(@Param("tenantId") Long tenantId,
                        @Param("affiliateId") Long affiliateId,
                        @Param("campaignId") Long campaignId,
@@ -28,8 +28,8 @@ public interface ClickRepository extends JpaRepository<Click, Long> {
                        @Param("to") LocalDateTime to);
 
     @Query("SELECT c.affiliateId, COUNT(c) FROM Click c WHERE c.tenantId = :tenantId " +
-           "AND (:from IS NULL OR c.createdAt >= :from) " +
-           "AND (:to IS NULL OR c.createdAt <= :to) " +
+           "AND (cast(:from as timestamp) IS NULL OR c.createdAt >= :from) " +
+           "AND (cast(:to as timestamp) IS NULL OR c.createdAt <= :to) " +
            "GROUP BY c.affiliateId")
     List<Object[]> countByAffiliate(@Param("tenantId") Long tenantId,
                                     @Param("from") LocalDateTime from,

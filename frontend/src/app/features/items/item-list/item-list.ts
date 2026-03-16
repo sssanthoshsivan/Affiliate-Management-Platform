@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,28 +37,39 @@ export class ItemList implements OnInit {
     private itemService: ItemService,
     private tenantContext: TenantContextService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit(): void {
-    this.loadItems();
+    this.tenantContext.tenantId$.subscribe(tenantId => {
+      if (tenantId) {
+        this.loadItems(tenantId);
+      } else {
+        this.loading = false;
+      }
+    });
   }
 
-  loadItems(): void {
-    const tenantId = this.tenantContext.getTenantId();
-    if (tenantId) {
-      this.loading = true;
-      this.itemService.findByTenantId(tenantId).subscribe({
-        next: (data) => {
+  loadItems(tenantId: number): void {
+    this.loading = true;
+    this.itemService.findByTenantId(tenantId).subscribe({
+      next: (data) => {
+        this.zone.run(() => {
           this.items = data;
           this.loading = false;
-        },
-        error: () => {
+          this.cdr.detectChanges();
+        });
+      },
+      error: () => {
+        this.zone.run(() => {
           this.snackBar.open('Error loading items', 'Close', { duration: 3000 });
           this.loading = false;
-        }
-      });
-    }
+          this.cdr.detectChanges();
+        });
+      }
+    });
   }
 
   openCreateDialog(): void {
@@ -84,7 +95,7 @@ export class ItemList implements OnInit {
           this.itemService.create(tenantId, result).subscribe({
             next: () => {
               this.snackBar.open('Item created', 'Close', { duration: 3000 });
-              this.loadItems();
+              this.loadItems(tenantId);
             },
             error: () => this.snackBar.open('Error creating item', 'Close', { duration: 3000 })
           });

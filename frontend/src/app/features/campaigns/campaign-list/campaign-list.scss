@@ -1,2 +1,2 @@
 // I'll use a global file for these repeated styles later, for now replicating to ensure isolation.
-@import '../../affiliates/affiliate-list/affiliate-list.scss';
+@use '../../affiliates/affiliate-list/affiliate-list.scss' as *;

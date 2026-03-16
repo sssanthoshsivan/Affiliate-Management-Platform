@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -32,7 +32,7 @@ import { FilterBar } from '../filter-bar/filter-bar';
   styleUrl: './dashboard-home.scss'
 })
 export class DashboardHome implements OnInit {
-  analytics: Analytics | null = null;
+  analytics: Analytics = { totalClicks: 0, totalOrders: 0, totalRevenue: 0, totalCommission: 0, topAffiliates: [] };
   affiliates: Affiliate[] = [];
   campaigns: Campaign[] = [];
   items: Item[] = [];
@@ -46,17 +46,25 @@ export class DashboardHome implements OnInit {
     private itemService: ItemService,
     private campaignService: CampaignService,
     private tenantContext: TenantContextService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    const tenantId = this.tenantContext.getTenantId();
-    if (!tenantId) {
-      this.loading = false;
-      return;
-    }
+    this.tenantContext.tenantId$.subscribe(tenantId => {
+      if (tenantId) {
+        this.loadDashboardData(tenantId);
+      } else {
+        this.loading = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
 
-    // Load filter data and initial analytics
+  private loadDashboardData(tenantId: number): void {
+    this.loading = true;
+    this.cdr.markForCheck();
+    
     forkJoin({
       affiliates: this.affiliateService.findByTenantId(tenantId),
       items: this.itemService.findByTenantId(tenantId),
@@ -68,7 +76,11 @@ export class DashboardHome implements OnInit {
         this.campaigns = data.campaigns;
         this.loadAnalytics({});
       },
-      error: () => this.snackBar.open('Error loading dashboard data', 'Close', { duration: 3000 })
+      error: () => {
+        this.snackBar.open('Error loading dashboard data', 'Close', { duration: 3000 });
+        this.loading = false;
+        this.cdr.markForCheck();
+      }
     });
   }
 
@@ -76,14 +88,18 @@ export class DashboardHome implements OnInit {
     const tenantId = this.tenantContext.getTenantId();
     if (tenantId) {
       this.loading = true;
+      this.cdr.markForCheck();
+      
       this.analyticsService.getAnalytics(tenantId, filters).subscribe({
         next: (data) => {
           this.analytics = data;
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: () => {
           this.snackBar.open('Error fetching analytics', 'Close', { duration: 3000 });
           this.loading = false;
+          this.cdr.markForCheck();
         }
       });
     }
@@ -94,7 +110,7 @@ export class DashboardHome implements OnInit {
   }
 
   getConversionRate(orders: number, clicks: number): string {
-    if (!clicks) return '0%';
+    if (!clicks || clicks === 0) return '0%';
     return `${((orders / clicks) * 100).toFixed(1)}%`;
   }
 }

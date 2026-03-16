@@ -45,12 +45,22 @@ export class App implements OnInit {
   ngOnInit(): void {
     this.tenants$ = this.tenantService.findAll();
     this.selectedTenantId = this.tenantContext.getTenantId();
+
+    // If no tenant selected, pick the first one from the list
+    if (!this.selectedTenantId) {
+      this.tenants$.subscribe(tenants => {
+        if (tenants?.length > 0) {
+          const firstTenantId = tenants[0].id!;
+          this.tenantContext.setTenantId(firstTenantId);
+          this.selectedTenantId = firstTenantId;
+        }
+      });
+    }
   }
 
   onTenantChange(id: number): void {
     this.tenantContext.setTenantId(id);
     this.selectedTenantId = id;
-    // Reload current route to refresh data for new tenant
-    window.location.reload();
+    // Removed window.location.reload() to favor reactive updates
   }
 }

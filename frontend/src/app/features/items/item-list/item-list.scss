@@ -1,4 +1,4 @@
-@import '../../affiliates/affiliate-list/affiliate-list.scss';
+@use '../../affiliates/affiliate-list/affiliate-list.scss' as *;
 
 .type-chip {
   padding: 4px 10px;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -50,7 +50,8 @@ export class LinkGenerator implements OnInit {
     private campaignService: CampaignService,
     private linkService: LinkService,
     private tenantContext: TenantContextService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {
     this.generatorForm = this.fb.group({
       affiliateId: ['', Validators.required],
@@ -70,6 +71,7 @@ export class LinkGenerator implements OnInit {
         this.affiliates = data.affiliates;
         this.items = data.items;
         this.campaigns = data.campaigns;
+        this.cdr.detectChanges();
       });
     }
   }
@@ -77,7 +79,7 @@ export class LinkGenerator implements OnInit {
   generateLink(): void {
     if (this.generatorForm.valid) {
       this.loading = true;
-      const request = {
+      const request: any = {
         ...this.generatorForm.value,
         tenantId: this.tenantContext.getTenantId()
       };
@@ -86,10 +88,12 @@ export class LinkGenerator implements OnInit {
         next: (response) => {
           this.generatedLink = response;
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: () => {
           this.snackBar.open('Error generating link', 'Close', { duration: 3000 });
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
     }

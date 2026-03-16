@@ -13,6 +13,7 @@ export interface DialogField {
   type: 'text' | 'email' | 'number' | 'select' | 'textarea';
   required?: boolean;
   options?: { value: any, label: string }[];
+  initialValue?: any;
 }
 
 @Component({
@@ -43,7 +44,7 @@ export class CreateDialog {
     data.fields.forEach(field => {
       const validators = field.required ? [Validators.required] : [];
       if (field.type === 'email') validators.push(Validators.email);
-      group[field.name] = ['', validators];
+      group[field.name] = [field.initialValue ?? '', validators];
     });
     this.form = this.fb.group(group);
   }

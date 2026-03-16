@@ -19,8 +19,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
            "AND (:affiliateId IS NULL OR o.affiliateId = :affiliateId) " +
            "AND (:campaignId IS NULL OR o.campaignId = :campaignId) " +
            "AND (:itemId IS NULL OR o.itemId = :itemId) " +
-           "AND (:from IS NULL OR o.createdAt >= :from) " +
-           "AND (:to IS NULL OR o.createdAt <= :to)")
+           "AND (cast(:from as timestamp) IS NULL OR o.createdAt >= :from) " +
+           "AND (cast(:to as timestamp) IS NULL OR o.createdAt <= :to)")
     Long countFiltered(@Param("tenantId") Long tenantId,
                        @Param("affiliateId") Long affiliateId,
                        @Param("campaignId") Long campaignId,
@@ -32,8 +32,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
            "AND (:affiliateId IS NULL OR o.affiliateId = :affiliateId) " +
            "AND (:campaignId IS NULL OR o.campaignId = :campaignId) " +
            "AND (:itemId IS NULL OR o.itemId = :itemId) " +
-           "AND (:from IS NULL OR o.createdAt >= :from) " +
-           "AND (:to IS NULL OR o.createdAt <= :to)")
+           "AND (cast(:from as timestamp) IS NULL OR o.createdAt >= :from) " +
+           "AND (cast(:to as timestamp) IS NULL OR o.createdAt <= :to)")
     BigDecimal sumRevenue(@Param("tenantId") Long tenantId,
                           @Param("affiliateId") Long affiliateId,
                           @Param("campaignId") Long campaignId,
@@ -42,11 +42,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                           @Param("to") LocalDateTime to);
 
     @Query("SELECT COALESCE(SUM(o.commission), 0) FROM Order o WHERE o.tenantId = :tenantId " +
+           "AND (:affiliateId IS NULL OR o.commission IS NOT NULL) " + // Simple type hint
            "AND (:affiliateId IS NULL OR o.affiliateId = :affiliateId) " +
            "AND (:campaignId IS NULL OR o.campaignId = :campaignId) " +
            "AND (:itemId IS NULL OR o.itemId = :itemId) " +
-           "AND (:from IS NULL OR o.createdAt >= :from) " +
-           "AND (:to IS NULL OR o.createdAt <= :to)")
+           "AND (cast(:from as timestamp) IS NULL OR o.createdAt >= :from) " +
+           "AND (cast(:to as timestamp) IS NULL OR o.createdAt <= :to)")
     BigDecimal sumCommission(@Param("tenantId") Long tenantId,
                              @Param("affiliateId") Long affiliateId,
                              @Param("campaignId") Long campaignId,
@@ -56,8 +57,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o.affiliateId, COUNT(o), COALESCE(SUM(o.orderValue), 0), COALESCE(SUM(o.commission), 0) " +
            "FROM Order o WHERE o.tenantId = :tenantId " +
-           "AND (:from IS NULL OR o.createdAt >= :from) " +
-           "AND (:to IS NULL OR o.createdAt <= :to) " +
+           "AND (cast(:from as timestamp) IS NULL OR o.createdAt >= :from) " +
+           "AND (cast(:to as timestamp) IS NULL OR o.createdAt <= :to) " +
            "GROUP BY o.affiliateId")
     List<Object[]> aggregateByAffiliate(@Param("tenantId") Long tenantId,
                                         @Param("from") LocalDateTime from,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,7 +37,8 @@ export class TenantList implements OnInit {
   constructor(
     private tenantService: TenantService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -50,10 +51,12 @@ export class TenantList implements OnInit {
       next: (data) => {
         this.tenants = data;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.snackBar.open('Error loading tenants', 'Close', { duration: 3000 });
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -85,11 +88,25 @@ export class TenantList implements OnInit {
   }
 
   updateCommission(tenant: Tenant): void {
-    const newRate = prompt('Enter new commission rate (%)', tenant.commissionRate.toString());
-    if (newRate !== null) {
-      const rate = parseFloat(newRate);
-      if (!isNaN(rate)) {
-        this.tenantService.updateCommissionRate(tenant.id, rate).subscribe({
+    const dialogRef = this.dialog.open(CreateDialog, {
+      width: '400px',
+      data: {
+        title: `Update Commission: ${tenant.name}`,
+        fields: [
+          { 
+            name: 'commissionRate', 
+            label: 'Commission Rate (%)', 
+            type: 'number', 
+            required: true, 
+            initialValue: tenant.commissionRate 
+          }
+        ]
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.commissionRate !== undefined) {
+        this.tenantService.updateCommissionRate(tenant.id, result.commissionRate).subscribe({
           next: () => {
             this.snackBar.open('Commission rate updated', 'Close', { duration: 3000 });
             this.loadTenants();
@@ -97,6 +114,6 @@ export class TenantList implements OnInit {
           error: () => this.snackBar.open('Error updating rate', 'Close', { duration: 3000 })
         });
       }
-    }
+    });
   }
 }

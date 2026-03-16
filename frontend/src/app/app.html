@@ -1,19 +1,23 @@
-<mat-toolbar color="primary" class="app-toolbar mat-elevation-z4">
-  <button mat-icon-button (click)="sidenav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span class="title">{{ title() }}</span>
+<mat-toolbar class="app-toolbar">
+  <div class="toolbar-left">
+    <button mat-icon-button (click)="sidenav.toggle()" class="menu-btn">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="title">RunLoyal</span>
+  </div>
   
   <span class="spacer"></span>
 
-  <mat-form-field appearance="outline" class="tenant-selector" *ngIf="tenants$ | async as tenants">
-    <mat-label>Active Tenant</mat-label>
-    <mat-select [value]="selectedTenantId" (selectionChange)="onTenantChange($event.value)">
-      <mat-option *ngFor="let tenant of tenants" [value]="tenant.id">
-        {{ tenant.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div class="toolbar-right">
+    <mat-form-field appearance="outline" class="tenant-selector" *ngIf="tenants$ | async as tenants">
+      <mat-label>Active Tenant</mat-label>
+      <mat-select [value]="selectedTenantId" (selectionChange)="onTenantChange($event.value)">
+        <mat-option *ngFor="let tenant of tenants" [value]="tenant.id">
+          {{ tenant.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </mat-toolbar>
 
 <mat-sidenav-container class="app-container">

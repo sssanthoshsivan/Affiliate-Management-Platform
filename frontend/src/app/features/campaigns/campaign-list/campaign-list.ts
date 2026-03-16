@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,28 +37,34 @@ export class CampaignList implements OnInit {
     private campaignService: CampaignService,
     private tenantContext: TenantContextService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadCampaigns();
+    this.tenantContext.tenantId$.subscribe(tenantId => {
+      if (tenantId) {
+        this.loadCampaigns(tenantId);
+      } else {
+        this.loading = false;
+      }
+    });
   }
 
-  loadCampaigns(): void {
-    const tenantId = this.tenantContext.getTenantId();
-    if (tenantId) {
-      this.loading = true;
-      this.campaignService.findByTenantId(tenantId).subscribe({
-        next: (data) => {
-          this.campaigns = data;
-          this.loading = false;
-        },
-        error: () => {
-          this.snackBar.open('Error loading campaigns', 'Close', { duration: 3000 });
-          this.loading = false;
-        }
-      });
-    }
+  loadCampaigns(tenantId: number): void {
+    this.loading = true;
+    this.campaignService.findByTenantId(tenantId).subscribe({
+      next: (data) => {
+        this.campaigns = data;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.snackBar.open('Error loading campaigns', 'Close', { duration: 3000 });
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   openCreateDialog(): void {
@@ -80,7 +86,7 @@ export class CampaignList implements OnInit {
           this.campaignService.create(tenantId, result).subscribe({
             next: () => {
               this.snackBar.open('Campaign created', 'Close', { duration: 3000 });
-              this.loadCampaigns();
+              this.loadCampaigns(tenantId);
             },
             error: () => this.snackBar.open('Error creating campaign', 'Close', { duration: 3000 })
           });

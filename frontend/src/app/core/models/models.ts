@@ -69,6 +69,7 @@ export interface Analytics {
 export interface AffiliatePerformance {
   affiliateId: number;
   affiliateName: string;
+  clicks: number;
   orders: number;
   revenue: number;
   commission: number;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,30 +37,32 @@ export class AffiliateList implements OnInit {
     private affiliateService: AffiliateService,
     private tenantContext: TenantContextService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadAffiliates();
+    this.tenantContext.tenantId$.subscribe(tenantId => {
+      if (tenantId) {
+        this.loadAffiliates(tenantId);
+      } else {
+        this.loading = false;
+      }
+    });
   }
 
-  loadAffiliates(): void {
-    const tenantId = this.tenantContext.getTenantId();
-    if (!tenantId) {
-      this.snackBar.open('Please select a tenant first', 'Close', { duration: 3000 });
-      this.loading = false;
-      return;
-    }
-
+  loadAffiliates(tenantId: number): void {
     this.loading = true;
     this.affiliateService.findByTenantId(tenantId).subscribe({
       next: (data) => {
         this.affiliates = data;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.snackBar.open('Failed to load affiliates', 'Close', { duration: 3000 });
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -84,7 +86,7 @@ export class AffiliateList implements OnInit {
           this.affiliateService.create(tenantId, result).subscribe({
             next: () => {
               this.snackBar.open('Affiliate created successfully', 'Close', { duration: 3000 });
-              this.loadAffiliates();
+              this.loadAffiliates(tenantId);
             },
             error: () => this.snackBar.open('Error creating affiliate', 'Close', { duration: 3000 })
           });

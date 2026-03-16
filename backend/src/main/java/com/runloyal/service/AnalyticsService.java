@@ -39,6 +39,10 @@ public class AnalyticsService {
 
         // Per-affiliate breakdown (always for the whole tenant, filtered by date)
         List<Object[]> affiliateData = orderRepository.aggregateByAffiliate(tenantId, from, to);
+        List<Object[]> clickData = clickRepository.countByAffiliate(tenantId, from, to);
+        
+        Map<Long, Long> clickMap = clickData.stream()
+                .collect(Collectors.toMap(row -> (Long) row[0], row -> (Long) row[1]));
         
         // Fetch names for performance table
         List<Affiliate> affiliates = affiliateRepository.findByTenantId(tenantId);
@@ -51,10 +55,10 @@ public class AnalyticsService {
             performanceList.add(AffiliatePerformance.builder()
                     .affiliateId(affId)
                     .affiliateName(nameMap.getOrDefault(affId, "Unknown"))
+                    .clicks(clickMap.getOrDefault(affId, 0L))
                     .orders((Long) row[1])
                     .revenue((BigDecimal) row[2])
                     .commission((BigDecimal) row[3])
-                    // Note: Clicks per affiliate could be joined here too
                     .build());
         }
 

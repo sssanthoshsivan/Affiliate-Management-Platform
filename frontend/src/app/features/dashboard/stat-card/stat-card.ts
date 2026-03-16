@@ -8,14 +8,14 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, MatCardModule, MatIconModule],
   template: `
-    <mat-card class="stat-card mat-elevation-z2" [ngStyle]="{'border-left': '4px solid ' + color}">
+    <mat-card class="stat-card glass-card" [style.border-top]="'4px solid ' + color">
       <mat-card-content>
         <div class="stat-content">
           <div class="stat-info">
             <span class="stat-label">{{ label }}</span>
             <h2 class="stat-value">{{ value }}</h2>
           </div>
-          <div class="stat-icon" [style.background-color]="color + '15'" [style.color]="color">
+          <div class="stat-icon-wrapper" [style.background]="'linear-gradient(135deg, ' + color + '10 0%, ' + color + '25 100%)'" [style.color]="color">
             <mat-icon>{{ icon }}</mat-icon>
           </div>
         </div>
